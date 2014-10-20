@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project arduinoCIChecker with libraries in sub-folder">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar">
+        <jar destfile="build/ciChecker.jar">
+            <manifest>
+                <attribute name="Main-Class" value="Starter"/>
+                <attribute name="Class-Path" value=". ciChecker_lib/jssc.jar ciChecker_lib/json-simple-1.1.1.jar ciChecker_lib/commons-io-2.4.jar"/>
+            </manifest>
+            <fileset dir="bin"/>
+        </jar>
+        <delete dir="build/ciChecker_lib"/>
+        <mkdir dir="build/ciChecker_lib"/>
+        <copy file="lib/jssc.jar" todir="build/ciChecker_lib"/>
+        <copy file="lib/json-simple-1.1.1.jar" todir="build/ciChecker_lib"/>
+        <copy file="lib/commons-io-2.4.jar" todir="build/ciChecker_lib"/>
+    	<copy file="lib/jssc.jar" todir="build/ciChecker_lib"/>
+    	<copydir src="img" dest="build/img"/>
+    </target>
+</project>
