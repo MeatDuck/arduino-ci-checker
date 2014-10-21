@@ -35,28 +35,33 @@ public class SerialManager {
 		}
 		return instance;
 	}
-	
+
 	public void connect(String comPort) {
-		if (serialPort!=null && serialPort.isOpened()) {
+		if (serialPort == null || !serialPort.isOpened()) {
+			serialPort = new SerialPort(comPort);
+			try {
+				serialPort.openPort();
+				serialPort.setParams(SerialPort.BAUDRATE_9600,
+						SerialPort.DATABITS_8, SerialPort.STOPBITS_1,
+						SerialPort.PARITY_NONE);
+				serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN
+						| SerialPort.FLOWCONTROL_RTSCTS_OUT);
+			} catch (SerialPortException e) {
+				UICustomManager.setStatus("Can't open port " + comPort);
+			}
+		}
+	}
+
+	public void reconnect(String comPort) {
+		if (serialPort != null && serialPort.isOpened()) {
 			try {
 				serialPort.closePort();
 			} catch (SerialPortException e) {
 				e.printStackTrace();
 			}
 		}
-		
-		serialPort = new SerialPort(comPort);
-		try {
-			serialPort.openPort();
-			serialPort.setParams(SerialPort.BAUDRATE_9600,
-                    SerialPort.DATABITS_8,
-                    SerialPort.STOPBITS_1,
-                    SerialPort.PARITY_NONE);
-            serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN | 
-                    SerialPort.FLOWCONTROL_RTSCTS_OUT);
-		} catch (SerialPortException e) {
-			UICustomManager.setStatus("Can't open port " + comPort);
-		}
+
+		connect(comPort);
 	}
 
 	public String getStatus(String jenkinsUrl) {

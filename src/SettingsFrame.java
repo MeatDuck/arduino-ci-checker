@@ -19,6 +19,8 @@ public class SettingsFrame extends JFrame {
 	private static final int HEIGHT = 30;
 	private static final int WIDTH = 500;
 	private static final String SETTINGS = "Settings";
+	private static final String URL = "url";
+	private static final String PORT = "port";
 	final JButton okBtn = new JButton("OK");
 	final Box vBox = Box.createVerticalBox();
 	private String[] portNames = SerialPortList.getPortNames();
@@ -33,7 +35,7 @@ public class SettingsFrame extends JFrame {
 
 		final JTextField input = new JTextField(url);
 		input.setText(url);
-		
+
 		final JList list = new JList(portNames);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setLayoutOrientation(JList.VERTICAL);
@@ -66,6 +68,10 @@ public class SettingsFrame extends JFrame {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+				String port = SettingsManager.getInstance().getParam(PORT);
+				String url = SettingsManager.getInstance().getParam(URL);
+				SerialManager.getInstance().reconnect(port);
+
 				Starter.initThread().start();
 			}
 		});
@@ -76,7 +82,7 @@ public class SettingsFrame extends JFrame {
 		setContentPane(vBox);
 		pack();
 	}
-	
+
 	public void setVisible(Boolean isVisible) {
 		portNames = SerialPortList.getPortNames();
 		super.setVisible(isVisible);
