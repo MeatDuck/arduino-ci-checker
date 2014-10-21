@@ -9,13 +9,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 public class UICustomManager {
-	public static final Image IMAGE = Toolkit.getDefaultToolkit().getImage("img/jenkinsLogo.png");
+	private static final String IMG = "img/jenkinsLogo.png";
+	public static final Image IMAGE = Toolkit.getDefaultToolkit().getImage(IMG);
 	private static final String INITIAL_STATUS = "Starting...";
 	static private TrayIcon trayIcon;
 	static private SettingsFrame settings = new SettingsFrame();
-	
+
 	static void prepareUI() {
 		SystemTray tray;
 		try {
@@ -60,14 +62,14 @@ public class UICustomManager {
 	}
 
 	public static String getStatus() {
-		if (trayIcon != null)  {
+		if (trayIcon != null) {
 			return trayIcon.getToolTip();
 		}
 		return "";
 	}
 
 	public static void setStatus(String status) {
-		if (trayIcon != null)  {
+		if (trayIcon != null) {
 			trayIcon.setToolTip(status);
 		}
 	}

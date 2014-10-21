@@ -52,7 +52,7 @@ public class SettingsFrame extends JFrame {
 		okBtn.setSize(WIDTH, HEIGHT);
 		okBtn.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent event) {
 				Map<String, String> map = new HashMap<String, String>();
 				map.put("url", input.getText());
 				if (list.getSelectedValue() != null) {
@@ -63,8 +63,8 @@ public class SettingsFrame extends JFrame {
 				Starter.getThread().setStop(true);
 				try {
 					Starter.getThread().join();
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 				Starter.initThread().start();
 			}

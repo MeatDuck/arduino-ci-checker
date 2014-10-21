@@ -1,4 +1,6 @@
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import jssc.SerialPort;
@@ -7,8 +9,15 @@ import jssc.SerialPortException;
 import org.apache.commons.io.IOUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 public class SerialManager {
+	private static final String FAILED_TO_WRITE_TO_SERIAL_PORT = "Failed to write to  serial port";
+	private static final String FAILURE_STR = "FAILURE";
+	private static final String SUCCESS_STR = "SUCCESS";
+	private static final String UNSTABLE_STR = "UNSTABLE";
+	private static final String BUILDING_STR = "BUILDING";
+	private static final String FAILED_TO_PARSE_JSON = "Failed to parse json";
 	static String SUCCESS = "g";
 	static String FAILURE = "r";
 	static String BUILDING = "a";
@@ -16,7 +25,7 @@ public class SerialManager {
 	private static SerialManager instance;
 	private static SerialPort serialPort = null;
 
-	private SerialManager(String comPort) throws SerialPortException {
+	private SerialManager(String comPort) {
 		serialPort = new SerialPort(comPort);
 		try {
 			serialPort.openPort();
@@ -27,13 +36,11 @@ public class SerialManager {
             serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN | 
                     SerialPort.FLOWCONTROL_RTSCTS_OUT);
 		} catch (SerialPortException e) {
-			System.out.println(e.getMessage());
-			throw e;
+			UICustomManager.setStatus("Can't open port " + comPort);
 		}
 	}
 
-	public static SerialManager getInstance(String comPort)
-			throws SerialPortException {
+	public static SerialManager getInstance(String comPort) {
 		if (instance == null) {
 			instance = new SerialManager(comPort);
 		}
@@ -51,13 +58,13 @@ public class SerialManager {
 				JSONParser json = new JSONParser();
 				buildStatusJson = (JSONObject) json.parse(jenkinsStream);
 
-			} catch (Exception e) {
-				System.out.println("Failed to parse json");
-				System.exit(3);
+			} catch (ParseException e) {
+				UICustomManager.setStatus(FAILED_TO_PARSE_JSON);
 			}
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			System.out.println("(job url [" + jenkinsUrl + "] probably wrong)");
+		} catch (MalformedURLException ex) {
+			UICustomManager.setStatus("Url " + jenkinsUrl + " probably wrong");
+		} catch (IOException ex) {
+			UICustomManager.setStatus("Failed to connect to  " + jenkinsUrl);
 		} finally {
 			if (in != null) {
 				IOUtils.closeQuietly(in);
@@ -66,7 +73,7 @@ public class SerialManager {
 
 		Object result = buildStatusJson.get("result");
 		if (result == null) {
-			result = new String("BUILDING");
+			result = new String(BUILDING_STR);
 		}
 		return result.toString();
 	}
@@ -75,16 +82,16 @@ public class SerialManager {
 		String status = getStatus(jenkinsUrl + "/lastBuild/api/json");
 		System.out.println(status);
 		try {
-			if ("UNSTABLE".equals(status))
+			if (UNSTABLE_STR.equals(status))
 				serialPort.writeString(UNSTABLE);
-			else if ("SUCCESS".equals(status))
+			else if (SUCCESS_STR.equals(status))
 				serialPort.writeString(SUCCESS);
-			else if ("FAILURE".equals(status))
+			else if (FAILURE_STR.equals(status))
 				serialPort.writeString(FAILURE);
 			else
 				serialPort.writeString(BUILDING);
 		} catch (SerialPortException e) {
-			e.printStackTrace();
+			UICustomManager.setStatus(FAILED_TO_WRITE_TO_SERIAL_PORT);
 		}
 		try {
 			Thread.sleep(10000);

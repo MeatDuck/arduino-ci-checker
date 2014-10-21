@@ -45,7 +45,7 @@ public class SettingsManager {
 				props.setProperty(item, map.get(item));
 				System.out.println("Store to param " + item + " = " + map.get(item));
 			}			
-			
+
 			FileWriter writer = new FileWriter(configFile);
 			props.store(writer, "");
 			writer.close();
