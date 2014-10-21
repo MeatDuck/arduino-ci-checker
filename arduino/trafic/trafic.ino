@@ -35,6 +35,16 @@ void loop() {
   else if (incomingByte == 'a') {
     all();
   }
+  else if (incomingByte == 'n') {
+	noone();
+  }
+}
+
+void noone() {
+  digitalWrite(12, LOW);
+  digitalWrite(11, LOW);
+  digitalWrite(10, LOW);
+  delay(3000);
 }
 
 void green() {
