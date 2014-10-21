@@ -9,12 +9,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 public class UICustomManager {
 	private static final String IMG = "img/jenkinsLogo.png";
 	public static final Image IMAGE = Toolkit.getDefaultToolkit().getImage(IMG);
-	private static final String INITIAL_STATUS = "Starting...";
+	private static final String INITIAL_STATUS = "Working...";
 	static private TrayIcon trayIcon;
 	static private SettingsFrame settings = new SettingsFrame();
 

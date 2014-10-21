@@ -9,7 +9,8 @@ public class StatusThread extends Thread {
 		String port = SettingsManager.getInstance().getParam(PORT);
 		String url = SettingsManager.getInstance().getParam(URL);
 				while (!isStop()) {
-					SerialManager.getInstance(port).process(url);
+					SerialManager.getInstance().connect(port);
+					SerialManager.getInstance().process(url);
 				}
 	}
 

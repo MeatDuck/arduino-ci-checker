@@ -25,7 +25,26 @@ public class SerialManager {
 	private static SerialManager instance;
 	private static SerialPort serialPort = null;
 
-	private SerialManager(String comPort) {
+	private SerialManager() {
+
+	}
+
+	public static SerialManager getInstance() {
+		if (instance == null) {
+			instance = new SerialManager();
+		}
+		return instance;
+	}
+	
+	public void connect(String comPort) {
+		if (serialPort!=null && serialPort.isOpened()) {
+			try {
+				serialPort.closePort();
+			} catch (SerialPortException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		serialPort = new SerialPort(comPort);
 		try {
 			serialPort.openPort();
@@ -38,13 +57,6 @@ public class SerialManager {
 		} catch (SerialPortException e) {
 			UICustomManager.setStatus("Can't open port " + comPort);
 		}
-	}
-
-	public static SerialManager getInstance(String comPort) {
-		if (instance == null) {
-			instance = new SerialManager(comPort);
-		}
-		return instance;
 	}
 
 	public String getStatus(String jenkinsUrl) {
