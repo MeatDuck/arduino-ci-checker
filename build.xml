@@ -18,8 +18,8 @@
     	<copy file="lib/jssc.jar" todir="build/ciChecker_lib"/>
     	<copydir src="img" dest="build/img"/>
     	
-    	<exec dir="${src}" executable="F:\Program Files\Launch4j\launch4jc.exe" os="Windows 2000" output="dir.txt">
-    	  <arg line="launch4j config.xml"/>
+    	<exec executable="F:\Program Files\Launch4j\launch4jc.exe">
+    	  <arg line="launch4j_config.xml"/>
     	</exec>    	 
     	
         <copy file="build/ciChecker_lib/jssc.jar" todir="build exe/ciChecker_lib"/>
