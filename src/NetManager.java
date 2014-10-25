@@ -46,7 +46,9 @@ public class NetManager {
 			URLConnection urlConnection = url.openConnection();
 
 			String encoded = SettingsManager.getInstance().getParam("encoded");
-			urlConnection.setRequestProperty("Authorization", "Basic " + encoded);
+			if (encoded != null) {
+				urlConnection.setRequestProperty("Authorization", "Basic " + encoded);
+			}
 
 			in = urlConnection.getInputStream();
 			jenkinsStream = IOUtils.toString(in);
