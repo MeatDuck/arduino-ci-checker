@@ -17,5 +17,17 @@
         <copy file="lib/commons-io-2.4.jar" todir="build/ciChecker_lib"/>
     	<copy file="lib/jssc.jar" todir="build/ciChecker_lib"/>
     	<copydir src="img" dest="build/img"/>
+    	
+    	<exec dir="${src}" executable="F:\Program Files\Launch4j\launch4jc.exe" os="Windows 2000" output="dir.txt">
+    	  <arg line="launch4j config.xml"/>
+    	</exec>    	 
+    	
+        <copy file="build/ciChecker_lib/jssc.jar" todir="build exe/ciChecker_lib"/>
+        <copy file="build/ciChecker_lib/json-simple-1.1.1.jar" todir="build exe/ciChecker_lib"/>
+        <copy file="build/ciChecker_lib/commons-io-2.4.jar" todir="build exe/ciChecker_lib"/>
+    	<copy file="build/ciChecker_lib/jssc.jar" todir="build exe/ciChecker_lib"/>
+    	<copydir src="build/img" dest="build exe/img"/>
+    	<copy file="build/ciChecker_lib/jssc.jar" todir="build exe/ciChecker_lib"/>
+    	<copy file="build/ciChecker.exe" todir="build exe"/>
     </target>
 </project>
