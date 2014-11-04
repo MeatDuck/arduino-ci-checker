@@ -26,6 +26,7 @@ SetCompressor ZLIB
 Name "${APP_NAME}"
 Caption "${APP_NAME}"
 OutFile "${INSTALLER_NAME}"
+RequestExecutionLevel admin ;Require admin rights on NT6+ (When UAC is turned on)
 BrandingText "${APP_NAME}"
 XPStyle on
 InstallDirRegKey "${REG_ROOT}" "${REG_APP_PATH}" ""
@@ -82,6 +83,9 @@ SetOutPath "$INSTDIR\lib"
 File "build_exe\lib\commons-io-2.4.jar"
 File "build_exe\lib\json-simple-1.1.1.jar"
 File "build_exe\lib\jssc.jar"
+File "build_exe\lib\log4j-1.2-api-2.1.jar"
+File "build_exe\lib\log4j-api-2.1.jar"
+File "build_exe\lib\log4j-core-2.1.jar"
 SectionEnd
 
 ######################################################################

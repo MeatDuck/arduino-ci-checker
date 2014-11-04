@@ -26,6 +26,7 @@
 	<target name="compile" depends="clean">
 		<mkdir dir="${classes.target}" />
 		<javac includeantruntime="false" srcdir="${src.dir}" destdir="${classes.target}" classpathref="master-classpath" />
+		<copy todir="${classes.target}" file="${src.dir}/log4j2.xml"/>
 	</target>
 
 	<target name="create_jar" depends="compile">
