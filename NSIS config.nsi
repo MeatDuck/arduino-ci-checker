@@ -74,14 +74,14 @@ Section -MainProgram
 ${INSTALL_TYPE}
 SetOverwrite ifnewer
 SetOutPath "$INSTDIR"
-File "F:\Users\AND\workspace\arduino-ci-checker\build exe\ciChecker.exe"
+File "build_exe\ciChecker.exe"
 SetOutPath "$INSTDIR\img"
-File "F:\Users\AND\workspace\arduino-ci-checker\build exe\img\jenkinsLogo.ico"
-File "F:\Users\AND\workspace\arduino-ci-checker\build exe\img\jenkinsLogo.png"
-SetOutPath "$INSTDIR\ciChecker_lib"
-File "F:\Users\AND\workspace\arduino-ci-checker\build exe\ciChecker_lib\commons-io-2.4.jar"
-File "F:\Users\AND\workspace\arduino-ci-checker\build exe\ciChecker_lib\json-simple-1.1.1.jar"
-File "F:\Users\AND\workspace\arduino-ci-checker\build exe\ciChecker_lib\jssc.jar"
+File "build_exe\img\jenkinsLogo.ico"
+File "build_exe\img\jenkinsLogo.png"
+SetOutPath "$INSTDIR\lib"
+File "build_exe\lib\commons-io-2.4.jar"
+File "build_exe\lib\json-simple-1.1.1.jar"
+File "build_exe\lib\jssc.jar"
 SectionEnd
 
 ######################################################################
@@ -131,11 +131,11 @@ ${INSTALL_TYPE}
 Delete "$INSTDIR\ciChecker.exe"
 Delete "$INSTDIR\img\jenkinsLogo.ico"
 Delete "$INSTDIR\img\jenkinsLogo.png"
-Delete "$INSTDIR\ciChecker_lib\commons-io-2.4.jar"
-Delete "$INSTDIR\ciChecker_lib\json-simple-1.1.1.jar"
-Delete "$INSTDIR\ciChecker_lib\jssc.jar"
+Delete "$INSTDIR\lib\commons-io-2.4.jar"
+Delete "$INSTDIR\lib\json-simple-1.1.1.jar"
+Delete "$INSTDIR\lib\jssc.jar"
  
-RmDir "$INSTDIR\ciChecker_lib"
+RmDir "$INSTDIR\lib"
 RmDir "$INSTDIR\img"
  
 Delete "$INSTDIR\uninstall.exe"

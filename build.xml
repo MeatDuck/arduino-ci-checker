@@ -1,43 +1,74 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="create_run_jar" name="Create Runnable Jar for Project arduinoCIChecker with libraries in sub-folder">
-    <!--ANT 1.7 is required                                        -->
-    <delete dir="build exe"/>
-	<delete dir="build/"/>
-    <target name="create_run_jar">
-        <jar destfile="build/ciChecker.jar">
-            <manifest>
-                <attribute name="Main-Class" value="Starter"/>
-                <attribute name="Class-Path" value=". ciChecker2_lib/commons-io-2.4.jar ciChecker2_lib/json-simple-1.1.1.jar ciChecker2_lib/jssc.jar ciChecker2_lib/commons-codec-1.9.jar ciChecker2_lib/log4j-1.2-api-2.1.jar ciChecker2_lib/log4j-core-2.1.jar ciChecker2_lib/log4j-api-2.1.jar"/>
-            </manifest>
-            <fileset dir="bin"/>
-        </jar>
-        <mkdir dir="build/ciChecker_lib"/>
-        <copy file="lib/jssc.jar" todir="build/ciChecker_lib"/>
-        <copy file="lib/json-simple-1.1.1.jar" todir="build/ciChecker_lib"/>
-        <copy file="lib/commons-io-2.4.jar" todir="build/ciChecker_lib"/>
-    	<copy file="lib/jssc.jar" todir="build/ciChecker_lib"/>
-    	<copy file="lib/commons-codec-1.9.jar" todir="build/ciChecker_lib"/>
-    	<copy file="lib/log4j-1.2-api-2.1.jar" todir="build/ciChecker_lib"/>
-    	<copy file="lib/log4j-core-2.1.jar" todir="build/ciChecker_lib"/>
-    	<copy file="lib/log4j-api-2.1.jar" todir="build/ciChecker_lib"/>
+<project default="create_jar" name="ci checker">
+	<property name="classpath" value="lib" />
+	<property name="target.dir" value="F:\Users\AND\workspace\arduino-ci-checker" />
+	<property name="basesrc.dir" value="F:\Users\AND\workspace\arduino-ci-checker" />
+	<property name="classes.target" value="${basesrc.dir}\bin" />
+	<property name="src.dir" value="${basesrc.dir}\src" />
+	<property name="build.target" value="${basesrc.dir}\build" />
+	<property name="build_exe.target" value="${basesrc.dir}\build_exe" />
+	<property name="launch4jc" value="F:\Program Files\Launch4j\launch4jc.exe" />
+	<property name="makensis" value="F:\Program Files\NSIS\makensis.exe" />
 
-    	<copydir src="img" dest="build/img"/>
-    	
-    	<exec executable="F:\Program Files\Launch4j\launch4jc.exe">
-    	  <arg line="launch4j_config.xml"/>
-    	</exec>    	 
-    	
-        <copy file="build/ciChecker_lib/jssc.jar" todir="build exe/ciChecker_lib"/>
-        <copy file="build/ciChecker_lib/json-simple-1.1.1.jar" todir="build exe/ciChecker_lib"/>
-        <copy file="build/ciChecker_lib/commons-io-2.4.jar" todir="build exe/ciChecker_lib"/>
-    	<copy file="build/ciChecker_lib/jssc.jar" todir="build exe/ciChecker_lib"/>
-        <copy file="build/ciChecker_lib/commons-codec-1.9.jar" todir="build exe/ciChecker_lib"/>
-        <copy file="build/ciChecker_lib/log4j-1.2-api-2.1.jar" todir="build exe/ciChecker_lib"/>
-        <copy file="build/ciChecker_lib/log4j-core-2.1.jar" todir="build exe/ciChecker_lib"/>
-    	<copy file="build/ciChecker_lib/log4j-api-2.1.jar" todir="build exe/ciChecker_lib"/>
 
-    	<copydir src="build/img" dest="build exe/img"/>
-    	<copy file="build/ciChecker.exe" todir="build exe"/>
-    	<delete file="build/ciChecker.exe"/>
-    </target>
+	<path id="master-classpath">
+		<fileset dir="${classpath}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<target name="clean">
+		<delete dir="${build_exe.target}" />
+		<delete dir="${build.target}" />
+		<delete dir="${classes.target}" />
+	</target>
+
+	<target name="compile" depends="clean">
+		<mkdir dir="${classes.target}" />
+		<javac includeantruntime="false" srcdir="${src.dir}" destdir="${classes.target}" classpathref="master-classpath" />
+	</target>
+
+	<target name="create_jar" depends="compile">
+		<mkdir dir="${build.target}" />
+		<manifestclasspath property="manifest_cp" jarfile="${build.target}\ciChecker.jar">
+			<classpath refid="master-classpath" />
+		</manifestclasspath>
+
+		<echo message="Manifest Classpath: ${manifest_cp}" />
+
+		<jar destfile="${target.dir}/build/ciChecker.jar">
+			<manifest>
+				<attribute name="Main-Class" value="Starter" />
+				<attribute name="Class-Path" value=". ${manifest_cp}" />
+			</manifest>
+
+			<fileset dir="${classes.target}" />
+		</jar>
+		<mkdir dir="${build.target}/lib" />
+
+		<copy todir="${build.target}/lib" flatten="true">
+			<path refid="master-classpath" />
+		</copy>
+
+		<copydir src="${basesrc.dir}/img" dest="${build.target}/img" />
+
+		<exec executable="${launch4jc}">
+			<arg line="${basesrc.dir}/launch4j_config.xml" />
+		</exec>
+
+		<copy todir="${build_exe.target}/lib" flatten="true">
+			<path refid="master-classpath" />
+		</copy>
+
+		<copydir src="${basesrc.dir}/img" dest="${build_exe.target}/img" />
+
+		<copy file="${build.target}/ciChecker.exe" todir="${build_exe.target}" />
+		<delete file="${build.target}/ciChecker.exe" />
+	</target>
+	
+	<target name="create_nsis" depends="create_jar">
+		<exec executable="${makensis}">
+			<arg line="'${basesrc.dir}\NSIS config.nsi'" />
+		</exec>
+	</target>	
 </project>
