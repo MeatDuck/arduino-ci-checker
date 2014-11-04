@@ -1,7 +1,11 @@
+import org.apache.log4j.Logger;
+
 import jssc.SerialPort;
 import jssc.SerialPortException;
 
 public class SerialManager {
+	private static final String FAILED_TO_PARSE_STATUS = "Failed to parse status";
+	Logger logger = Logger.getLogger(SerialManager.class);
 	private static final String FAILED_TO_WRITE_TO_SERIAL_PORT = "Failed to write to  serial port";
 	private static final String FAILURE_STR = "FAILURE";
 	private static final String SUCCESS_STR = "SUCCESS";
@@ -37,6 +41,7 @@ public class SerialManager {
 						| SerialPort.FLOWCONTROL_RTSCTS_OUT);
 			} catch (SerialPortException e) {
 				UICustomManager.setStatus("Can't open port " + comPort);
+				logger.debug(e);
 			}
 		}
 	}
@@ -47,6 +52,7 @@ public class SerialManager {
 				serialPort.closePort();
 			} catch (SerialPortException e) {
 				e.printStackTrace();
+				logger.debug(e);
 			}
 		}
 
@@ -55,9 +61,10 @@ public class SerialManager {
 
 	public void process(String jenkinsUrl) {
 		NetManager network = new NetManager();
-		String status = network.getStatus(jenkinsUrl + "/lastBuild/api/json");
-		System.out.println(status);
+
 		try {
+			String status = network.getStatus(jenkinsUrl + "/lastBuild/api/json");
+			logger.info(status);
 			if (UNSTABLE_STR.equals(status))
 				serialPort.writeString(UNSTABLE);
 			else if (SUCCESS_STR.equals(status))
@@ -68,11 +75,16 @@ public class SerialManager {
 				serialPort.writeString(BUILDING);
 		} catch (SerialPortException e) {
 			UICustomManager.setStatus(FAILED_TO_WRITE_TO_SERIAL_PORT);
+			logger.debug(e);
+		} catch (Exception e) {
+			UICustomManager.setStatus(e.getMessage());
+			logger.debug(e);
 		}
 		try {
 			Thread.sleep(10000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+			logger.debug(e);
 		}
 
 	}

@@ -6,7 +6,10 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 public class SettingsManager {
+	Logger logger = Logger.getLogger(SettingsManager.class);
 	private File configFile = new File("config.properties");
 	private static SettingsManager instance;
 
@@ -28,12 +31,14 @@ public class SettingsManager {
 			Properties props = new Properties();
 			props.load(reader);
 			value = props.getProperty(paramName);
-			System.out.println("Read from param " + paramName + " = " + value);
+			logger.info("Read from param " + paramName + " = " + value);
 			reader.close();
 		} catch (FileNotFoundException ex) {
 			ex.printStackTrace();
+			logger.debug(ex);
 		} catch (IOException ex) {
 			ex.printStackTrace();
+			logger.debug(ex);
 		}
 		return value;
 	}
@@ -43,7 +48,7 @@ public class SettingsManager {
 			Properties props = new Properties();
 			for (String item : map.keySet()) {
 				props.setProperty(item, map.get(item));
-				System.out.println("Store to param " + item + " = " + map.get(item));
+				logger.info("Store to param " + item + " = " + map.get(item));
 			}			
 
 			FileWriter writer = new FileWriter(configFile);
@@ -51,8 +56,10 @@ public class SettingsManager {
 			writer.close();
 		} catch (FileNotFoundException ex) {
 			ex.printStackTrace();
+			logger.debug(ex);
 		} catch (IOException ex) {
 			ex.printStackTrace();
+			logger.debug(ex);
 		}
 	}
 }

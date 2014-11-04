@@ -9,7 +9,7 @@
   <chdir>.</chdir>
   <priority>normal</priority>
   <downloadUrl>http://java.com/download</downloadUrl>
-  <supportUrl></supportUrl>
+  <supportUrl>https://code.google.com/p/arduino-ci-checker/</supportUrl>
   <stayAlive>false</stayAlive>
   <restartOnCrash>false</restartOnCrash>
   <manifest></manifest>
@@ -21,9 +21,13 @@
   <classPath>
     <mainClass>Starter</mainClass>
     <cp>.</cp>
-    <cp>ciChecker_lib/jssc.jar</cp>
-    <cp>ciChecker_lib/json-simple-1.1.1.jar</cp>
     <cp>ciChecker_lib/commons-io-2.4.jar</cp>
+    <cp>ciChecker_lib/json-simple-1.1.1.jar</cp>
+    <cp>ciChecker_lib/jssc.jar</cp>
+    <cp>ciChecker_lib/commons-codec-1.9.jar</cp>
+    <cp>ciChecker_lib/log4j-1.2-api-2.1.jar</cp>
+    <cp>ciChecker_lib/log4j-core-2.1.jar</cp>
+    <cp>ciChecker_lib/log4j-api-2.1.jar</cp>
   </classPath>
   <jre>
     <path></path>

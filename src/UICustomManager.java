@@ -10,7 +10,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.UIManager;
 
+import org.apache.log4j.Logger;
+
 public class UICustomManager {
+	static Logger logger = Logger.getLogger(UICustomManager.class);
 	private static final String IMG = "img/jenkinsLogo.png";
 	public static final Image IMAGE = Toolkit.getDefaultToolkit().getImage(IMG);
 	private static final String INITIAL_STATUS = "Working...";
@@ -20,13 +23,14 @@ public class UICustomManager {
 	static void prepareUI() {
 		SystemTray tray;
 		try {
-			System.out.println("setting look and feel");
+			logger.info("setting look and feel");
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
-			System.out.println("Unable to set LookAndFeel");
+			logger.info("Unable to set LookAndFeel");
+			logger.debug(e);
 		}
 		if (SystemTray.isSupported()) {
-			System.out.println("system tray supported");
+			logger.info("system tray supported");
 			tray = SystemTray.getSystemTray();
 
 			PopupMenu popup = new PopupMenu();
@@ -41,7 +45,7 @@ public class UICustomManager {
 			MenuItem exitItem = new MenuItem("Exit");
 			exitItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					System.out.println("Exiting....");
+					logger.info("Exiting....");
 					System.exit(0);
 				}
 			});
@@ -51,12 +55,13 @@ public class UICustomManager {
 			trayIcon.setImageAutoSize(true);
 			try {
 				tray.add(trayIcon);
-				System.out.println("added to SystemTray");
+				logger.info("added to SystemTray");
 			} catch (AWTException ex) {
-				System.out.println("unable to add to tray");
+				logger.info("unable to add to tray");
+				logger.debug(ex);
 			}
 		} else {
-			System.out.println("system tray not supported");
+			logger.info("system tray not supported");
 		}
 	}
 

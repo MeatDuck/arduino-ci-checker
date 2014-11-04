@@ -21,10 +21,12 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.log4j.Logger;
 
 import jssc.SerialPortList;
 
 public class SettingsFrame extends JFrame {
+	Logger logger = Logger.getLogger(SettingsFrame.class);
 	private static final long serialVersionUID = -3098199046429878039L;
 	private static final int HEIGHT = 30;
 	private static final int WIDTH = 500;
@@ -138,7 +140,7 @@ public class SettingsFrame extends JFrame {
 				try {
 					Starter.getThread().join();
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					logger.debug(e);
 				}
 				String port = SettingsManager.getInstance().getParam(PORT);
 				SerialManager.getInstance().reconnect(port);

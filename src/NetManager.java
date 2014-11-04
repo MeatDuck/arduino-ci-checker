@@ -17,8 +17,8 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -26,6 +26,7 @@ import org.json.simple.parser.ParseException;
 import com.sun.net.ssl.internal.ssl.Provider;
 
 public class NetManager {
+	Logger logger = Logger.getLogger(NetManager.class);
 	private static final String FAILED_TO_PARSE_JSON = "Failed to parse json";
 	private static final String BUILDING_STR = "BUILDING";
 
@@ -39,7 +40,7 @@ public class NetManager {
 			} catch (KeyManagementException e1) {
 				e1.printStackTrace();
 			} catch (NoSuchAlgorithmException e1) {
-				e1.printStackTrace();
+				logger.debug(e1);
 			}
 
 			URL url = new URL(jenkinsUrl);
@@ -55,20 +56,27 @@ public class NetManager {
 			try {
 				JSONParser json = new JSONParser();
 				buildStatusJson = (JSONObject) json.parse(jenkinsStream);
-
 			} catch (ParseException e) {
 				UICustomManager.setStatus(FAILED_TO_PARSE_JSON);
+				logger.debug(e);
 			}
 		} catch (MalformedURLException ex) {
 			UICustomManager.setStatus("Url " + jenkinsUrl + " probably wrong");
+			logger.debug(ex);
 		} catch (IOException ex) {
 			UICustomManager.setStatus("Failed to connect to  " + jenkinsUrl);
+			logger.debug(ex);
 		} finally {
 			if (in != null) {
 				IOUtils.closeQuietly(in);
 			}
 		}
-
+		
+		if (buildStatusJson == null) {
+			throw new RuntimeException("Failed ti parse status");
+		}
+		
+		
 		Object result = buildStatusJson.get("result");
 		if (result == null) {
 			result = new String(BUILDING_STR);
@@ -102,7 +110,7 @@ public class NetManager {
 			@Override
 			public boolean verify(String urlHostName, SSLSession session) {
 				if (!urlHostName.equalsIgnoreCase(session.getPeerHost())) {
-					System.out.println("Warning: URL host '" + urlHostName
+					logger.info("Warning: URL host '" + urlHostName
 							+ "' is different to SSLSession host '"
 							+ session.getPeerHost() + "'.");
 				}
