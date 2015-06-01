@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Arduino-ci-checker by MeatDuck</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Arduino-ci-checker</h1>
+        <p>Automatically exported from code.google.com/p/arduino-ci-checker</p>
+
+        <p class="view"><a href="https://github.com/MeatDuck/arduino-ci-checker">View the Project on GitHub <small>MeatDuck/arduino-ci-checker</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/MeatDuck/arduino-ci-checker/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/MeatDuck/arduino-ci-checker/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/MeatDuck/arduino-ci-checker">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p>=Intro=
+Let me present our recent continuous integration Traffic light notifier project that we just finished in the office. This project stemmed from my company's desire to immediately know if a developer has broken a software project, and what better way to do that than to have a huge red light flashing in your face. We connected an tree colored diods fixture to our Jenkins CI-server that monitors the testing status of all of our current software projects. If all our tests are passing, the light stays green, if any test fails the light turns red to provide a visual notification of a problem. While Jenkins is running a test suite on any project, the yellow light will flash to let us know of the activity.</p>
+
+<p>=Dependences=
+The Java code will create a serial connection with the Arduino to send data, then create a web connection with the CI server to request the build status data via our CI server's built in API. A quick look through the returned data will give us a chance to see if there are any problems – if so, we'll send a signal to the Arduino to change the light status, otherwise it stays green. The java programm requires 3 lib dependencies to run: </p>
+
+<ul>
+<li>[<a href="http://commons.apache.org/proper/commons-io">http://commons.apache.org/proper/commons-io</a> commons-io]</li>
+<li>[<a href="https://code.google.com/p/json-simple/">https://code.google.com/p/json-simple/</a> json simple]</li>
+<li>[<a href="https://code.google.com/p/java-simple-serial-connector/">https://code.google.com/p/java-simple-serial-connector/</a> java simple serial connector]</li>
+</ul>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/MeatDuck">MeatDuck</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
